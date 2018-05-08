@@ -21,7 +21,7 @@ ENV DOCKER_BUCKET="download.docker.com" \
     GITVERSION_VERSION="3.6.5"
 
 # 14.04 isn't maintained anymore
-RUN sudo sed -i.bak -r 's/(archive|security).ubuntu.com/kambing.ui.ac.id\/ubuntu/g' /etc/apt/sources.list \
+RUN sed -i.bak -r 's/(archive|security).ubuntu.com/download.nus.edu.sg\/mirror\/ubuntu/g' /etc/apt/sources.list \
     && rm /var/lib/apt/lists/* -vf \
     && apt-get update
 
@@ -143,7 +143,7 @@ RUN set -ex \
 
 ENV POSTGRES_VERSION=9.5 \
     POSTGRES_PATH="/etc/postgresql" \
-    POSTGRES_HBA_CONFIG="/etc/postgresql/main/pg_hba.conf" \
+    POSTGRES_HBA_CONFIG="/etc/postgresql/9.5/main/pg_hba.conf" \
     POSTGRES_CONFIG="/etc/postgresql/9.5/main/postgresql.conf"
 
 RUN LINUX_VERSION="$(lsb_release --codename | cut -f2)" \
@@ -164,6 +164,12 @@ RUN apt-get install libdbd-pg-perl \
     && rm -f $FILE_TEMPLATE \
     && echo "" > $FILE_TEMPLATE
 
+# Add User for Testing
+ENV USER=docker
+
+RUN useradd -m -d /home/$USER -s /bin/bash -c "docker testing" -U $USER
+
 COPY m2-settings.xml $MAVEN_CONFIG/settings.xml
+COPY create_user.py /
 
 ENTRYPOINT ["dockerd-entrypoint.sh"]
