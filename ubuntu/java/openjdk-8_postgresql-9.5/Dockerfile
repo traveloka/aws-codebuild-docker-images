@@ -21,7 +21,7 @@ ENV DOCKER_BUCKET="download.docker.com" \
     GITVERSION_VERSION="3.6.5"
 
 # 14.04 isn't maintained anymore
-RUN sed -i.bak -r 's/(archive|security).ubuntu.com/download.nus.edu.sg\/mirror\/ubuntu/g' /etc/apt/sources.list \
+RUN sed -i.bak -r 's/(archive|security).ubuntu.com/mirror.0x.sg\/ubuntu/g' /etc/apt/sources.list \
     && rm /var/lib/apt/lists/* -vf \
     && apt-get update
 
@@ -150,7 +150,7 @@ RUN LINUX_VERSION="$(lsb_release --codename | cut -f2)" \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ $LINUX_VERSION-pgdg main" >> /etc/apt/sources.list.d/pgdg.list \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - \
     && apt-get update \
-    && apt-get install -y postgresql-$POSTGRES_VERSION postgresql-contrib-$POSTGRES_VERSION python-psycopg2 \
+    && apt-get install -y postgresql-$POSTGRES_VERSION postgresql-contrib-$POSTGRES_VERSION postgresql-$POSTGRES_VERSION-pgtap  python-psycopg2 \
     && pip install pexpect 
 
 # Install Sqitch
