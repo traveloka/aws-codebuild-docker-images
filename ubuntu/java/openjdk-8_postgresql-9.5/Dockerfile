@@ -167,4 +167,3 @@ RUN useradd -m -d /home/$USER -s /bin/bash -c "docker testing" -U $USER
 COPY m2-settings.xml $MAVEN_CONFIG/settings.xml
 COPY create_user.py /
 
-ENTRYPOINT ["dockerd-entrypoint.sh"]
