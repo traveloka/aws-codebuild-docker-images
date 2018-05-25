@@ -101,7 +101,7 @@ ENV NODE_VERSION="8.11.0" \
     ANDROID_HOME="/usr/local/android-sdk-linux" \
     JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
     JAVA_VERSION="8" \
-    JDK_VERSION="8u162-b12-1~14.04" \
+    JDK_VERSION="8u171-b11-2~14.04" \
     JDK_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
     JRE_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre" \
     INSTALLED_GRADLE_VERSIONS="2.14.1 3.5 4.0.2 4.1 4.2.1 4.3.1 4.4 4.6" \
@@ -182,5 +182,3 @@ RUN set -ex \
       && android-accept-licenses.sh "sdkmanager --verbose platform-tools ${ANDROID_SDK_BUILD_TOOLS} ${ANDROID_SDK_PLATFORM_TOOLS} ${ANDROID_SDK_EXTRAS}" \
       && android-accept-licenses.sh "sdkmanager --licenses" \
       && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-ENTRYPOINT ["dockerd-entrypoint.sh"]
