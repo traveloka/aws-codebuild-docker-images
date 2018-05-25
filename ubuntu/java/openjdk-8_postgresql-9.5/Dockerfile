@@ -20,11 +20,6 @@ ENV DOCKER_BUCKET="download.docker.com" \
     DOCKER_COMPOSE_VERSION="1.16.1" \
     GITVERSION_VERSION="3.6.5"
 
-# 14.04 isn't maintained anymore
-RUN sed -i.bak -r 's/(archive|security).ubuntu.com/mirror.0x.sg\/ubuntu/g' /etc/apt/sources.list \
-    && rm /var/lib/apt/lists/* -vf \
-    && apt-get update
-
 # Building git from source code:
 #   Ubuntu's default git package is built with broken gnutls. Rebuild git with openssl.
 ##########################################################################
@@ -101,7 +96,7 @@ COPY dockerd-entrypoint.sh /usr/local/bin/
 
 ENV JAVA_VERSION=8 \
     JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
-    JDK_VERSION="8u162-b12-1~14.04" \
+    JDK_VERSION="8u171-b11-2~14.04" \
     JDK_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
     JRE_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre" \
     ANT_VERSION=1.9.6 \
@@ -172,4 +167,3 @@ RUN useradd -m -d /home/$USER -s /bin/bash -c "docker testing" -U $USER
 COPY m2-settings.xml $MAVEN_CONFIG/settings.xml
 COPY create_user.py /
 
-ENTRYPOINT ["dockerd-entrypoint.sh"]

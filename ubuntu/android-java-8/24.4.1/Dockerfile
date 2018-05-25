@@ -99,7 +99,7 @@ COPY tools /opt/tools
 
 ENV ANDROID_HOME="/usr/local/android-sdk-linux" \
     JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
-    JDK_VERSION="8u162-b12-1~14.04" \
+    JDK_VERSION="8u171-b11-2~14.04" \
     JDK_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
     JRE_HOME="/usr/lib/jvm/java-8-openjdk-amd64/jre" \
     JAVA_VERSION="8" \
@@ -148,5 +148,3 @@ RUN set -ex \
       && ln -s $ANDROID_HOME/tools/android /usr/bin/android \
       && /opt/tools/android-accept-licenses.sh "android update sdk --all --no-ui --filter platform-tools,build-tools-23.0.3,build-tools-24.0.3,build-tools-25.0.3,build-tools-26.0.2,android-23,android-24,android-25,android-26" \
       && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-ENTRYPOINT ["dockerd-entrypoint.sh"]
