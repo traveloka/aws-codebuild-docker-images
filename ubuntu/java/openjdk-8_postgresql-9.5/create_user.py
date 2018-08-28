@@ -14,3 +14,6 @@ child.expect('(?i)Enter password for new role:')
 child.sendline(user)
 child.expect('(?i)Enter it again:')
 child.sendline(user)
+
+pexpect.run("sudo -u postgres psql -c 'ALTER ROLE docker SUPERUSER'")
+
