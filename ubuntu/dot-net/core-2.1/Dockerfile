@@ -97,24 +97,59 @@ VOLUME /var/lib/docker
 
 COPY dockerd-entrypoint.sh /usr/local/bin/
 
-ENV GOLANG_VERSION="1.10" \
-    GOLANG_DOWNLOAD_SHA256="b5a64335f1490277b585832d1f6c7f8c6c11206cba5cd3f771dcb87b98ad1a33" \
-    GOPATH="/go" \
-    DEP_VERSION="0.4.1" \
-    DEP_BINARY="dep-linux-amd64"
+# Install .NET CLI dependencies
+RUN set -ex \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libc6=2.19-* \
+        libcurl3=7.35.* \
+        libgcc1=1:4.9.* \
+        libgssapi-krb5-2=1.12* \
+        libicu52=52.1-* \
+        liblttng-ust0=2.4.* \
+        libssl1.0.0=1.0.* \
+        libunwind8=1.1-* \
+        libuuid1=2.20.* \
+        zlib1g=1:1.2.* \
+        software-properties-common=0.92.* \
+    && add-apt-repository ppa:ubuntu-toolchain-r/test -y \
+    && apt-get update \
+    && apt-get install -y libstdc++6=8*\
+    && rm -rf /var/lib/apt/lists/*
+
+# Install .NET Core SDK
+ENV DOTNET_SDK_VERSION 2.1.302
+ENV DOTNET_SDK_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-x64.tar.gz
+ENV DOTNET_SDK_DOWNLOAD_SHA 2166986e360f1c3456a33723edb80349e6ede115be04a6331bfbfd0f412494684d174a0cfb21d2feb00d509ce342030160a4b5b445e393ad83bedb613a64bc66
 
 RUN set -ex \
-    && mkdir -p "$GOPATH/src" "$GOPATH/bin" \
-    && chmod -R 777 "$GOPATH" \
-    && apt-get update && apt-get install -y --no-install-recommends \
-        pkg-config=0.26-* \
-    && apt-get clean \
-    && wget "https://storage.googleapis.com/golang/go$GOLANG_VERSION.linux-amd64.tar.gz" -O /tmp/golang.tar.gz \
-    && echo "$GOLANG_DOWNLOAD_SHA256 /tmp/golang.tar.gz" | sha256sum -c - \
-    && tar -xzf /tmp/golang.tar.gz -C /usr/local \
-    && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    && wget "https://github.com/golang/dep/releases/download/v$DEP_VERSION/$DEP_BINARY" -O "$GOPATH/bin/dep" \
-    && chmod +x "$GOPATH/bin/dep"
+    && curl -SL $DOTNET_SDK_DOWNLOAD_URL --output dotnet.tar.gz \
+    && echo "$DOTNET_SDK_DOWNLOAD_SHA dotnet.tar.gz" | sha512sum -c - \
+    && mkdir -p /usr/share/dotnet \
+    && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
+    && rm dotnet.tar.gz \
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
 
-ENV PATH="$GOPATH/bin:/usr/local/go/bin:$PATH"
-WORKDIR $GOPATH
+# Trigger the population of the local package cache
+ENV NUGET_XMLDOC_MODE skip
+RUN set -ex \
+    && mkdir warmup \
+    && cd warmup \
+    && dotnet new \
+    && cd .. \
+    && rm -rf warmup \
+    && rm -rf /tmp/NuGetScratch
+
+# Install Powershell Core
+# See instructions at https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-powershell-core-on-linux
+ENV POWERSHELL_VERSION 6.0.3
+ENV POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/powershell-6.0.3-linux-x64.tar.gz
+ENV POWERSHELL_DOWNLOAD_SHA A43D3056688FABC442BFBE0FD7A096F7E28036759EFF9D6EBE8CB9155C9D9AAB
+
+RUN set -ex \
+    && curl -SL $POWERSHELL_DOWNLOAD_URL --output powershell.tar.gz \
+    && echo "$POWERSHELL_DOWNLOAD_SHA powershell.tar.gz" | sha256sum -c - \
+    && mkdir -p /opt/microsoft/powershell/$POWERSHELL_VERSION \
+    && tar zxf powershell.tar.gz -C /opt/microsoft/powershell/$POWERSHELL_VERSION \
+    && rm powershell.tar.gz \
+    && ln -s /opt/microsoft/powershell/$POWERSHELL_VERSION/pwsh /usr/bin/pwsh

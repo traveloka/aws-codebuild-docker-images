@@ -17,41 +17,43 @@ ENV DOCKER_BUCKET="download.docker.com" \
     DOCKER_CHANNEL="stable" \
     DOCKER_SHA256="a9e90a73c3cdfbf238f148e1ec0eaff5eb181f92f35bdd938fd7dab18e1c4647" \
     DIND_COMMIT="3b5fac462d21ca164b3778647420016315289034" \
-    DOCKER_COMPOSE_VERSION="1.16.1" \
+    DOCKER_COMPOSE_VERSION="1.21.2" \
     GITVERSION_VERSION="3.6.5"
 
-# Building git from source code:
-#   Ubuntu's default git package is built with broken gnutls. Rebuild git with openssl.
-##########################################################################
+# Install git, SSH, and other utilities
 RUN set -ex \
     && echo 'Acquire::CompressionTypes::Order:: "gz";' > /etc/apt/apt.conf.d/99use-gzip-compression \
     && apt-get update \
+    && apt-get install software-properties-common -y --no-install-recommends \
+    && apt-add-repository ppa:git-core/ppa \
+    && apt-get update \
+    && apt-get install git=1:2.* -y --no-install-recommends \
+    && git version \
+    && apt-get install -y --no-install-recommends openssh-client=1:6.6* \
+    && mkdir ~/.ssh \
+    && touch ~/.ssh/known_hosts \
+    && ssh-keyscan -t rsa,dsa -H github.com >> ~/.ssh/known_hosts \
+    && ssh-keyscan -t rsa,dsa -H bitbucket.org >> ~/.ssh/known_hosts \
+    && chmod 600 ~/.ssh/known_hosts \
     && apt-get install -y --no-install-recommends \
-       wget=1.15-* python=2.7.5-* python2.7-dev=2.7.6-* fakeroot=1.20-* ca-certificates \
-       tar=1.27.1-* gzip=1.6-* zip=3.0-* autoconf=2.69-* automake=1:1.14.1-* \
-       bzip2=1.0.6-* file=1:5.14-* g++=4:4.8.2-* gcc=4:4.8.2-* imagemagick=8:6.7.7.10-* \
-       libbz2-dev=1.0.6-* libc6-dev=2.19-* libcurl4-openssl-dev=7.35.0-* libdb-dev=1:5.3.21~* \
-       libevent-dev=2.0.21-stable-* libffi-dev=3.1~rc1+r3.0.13-* libgeoip-dev=1.6.0-* libglib2.0-dev=2.40.2-* \
-       libjpeg-dev=8c-* libkrb5-dev=1.12+dfsg-* liblzma-dev=5.1.1alpha+20120614-* \
-       libmagickcore-dev=8:6.7.7.10-* libmagickwand-dev=8:6.7.7.10-* libmysqlclient-dev=5.5.60-* \
-       libncurses5-dev=5.9+20140118-* libpng12-dev=1.2.50-* libpq-dev=9.3.22-* libreadline-dev=6.3-* \
-       libsqlite3-dev=3.8.2-* libssl-dev=1.0.1f-* libtool=2.4.2-* libwebp-dev=0.4.0-* \
-       libxml2-dev=2.9.1+dfsg1-* libxslt1-dev=1.1.28-* libyaml-dev=0.1.4-* make=3.81-* \
-       patch=2.7.1-* xz-utils=5.1.1alpha+20120614-* zlib1g-dev=1:1.2.8.dfsg-* unzip=6.0-* curl=7.35.0-* \
-       e2fsprogs=1.42.9-* iptables=1.4.21-* xfsprogs=3.1.9ubuntu2 xz-utils=5.1.1alpha+20120614-* \
-       mono-mcs=3.2.8+dfsg-* \
-    && apt-get install -y -qq less=458-* groff=1.22.2-* \
-    && apt-get -qy build-dep git=1:1.9.1 \
-    && apt-get -qy install libcurl4-openssl-dev=7.35.0-* git-man=1:1.9.1-* liberror-perl=0.17-* \
-    && mkdir -p /usr/src/git-openssl \
-    && cd /usr/src/git-openssl \
-    && apt-get source git=1:1.9.1 \
-    && cd $(find -mindepth 1 -maxdepth 1 -type d -name "git-*") \
-    && sed -i -- 's/libcurl4-gnutls-dev/libcurl4-openssl-dev/' ./debian/control \
-    && sed -i -- '/TEST\s*=\s*test/d' ./debian/rules \
-    && dpkg-buildpackage -rfakeroot -b \
-    && find .. -type f -name "git_*ubuntu*.deb" -exec dpkg -i \{\} \; \
-    && rm -rf /usr/src/git-openssl \
+       wget=1.15-* python=2.7.* python2.7-dev=2.7.* fakeroot=1.20-* ca-certificates \
+       tar=1.27.* gzip=1.6-* zip=3.0-* autoconf=2.69-* automake=1:1.14.* \
+       bzip2=1.0.* file=1:5.14-* g++=4:4.8.* gcc=4:4.8.* imagemagick=8:6.7.* \
+       libbz2-dev=1.0.* libc6-dev=2.19-* libcurl4-openssl-dev=7.35.* libdb-dev=1:5.3.* \
+       libevent-dev=2.0.* libffi-dev=3.1~* libgeoip-dev=1.6.* libglib2.0-dev=2.40.* \
+       libjpeg-dev=8c-* libkrb5-dev=1.12+* liblzma-dev=5.1.* \
+       libmagickcore-dev=8:6.7.* libmagickwand-dev=8:6.7.* libmysqlclient-dev=5.5.* \
+       libncurses5-dev=5.9+* libpng12-dev=1.2.* libpq-dev=9.3.* libreadline-dev=6.3-* \
+       libsqlite3-dev=3.8.* libssl-dev=1.0.* libtool=2.4.* libwebp-dev=0.4.* \
+       libxml2-dev=2.9.* libxslt1-dev=1.1.* libyaml-dev=0.1.* make=3.81-* \
+       patch=2.7.* xz-utils=5.1.* zlib1g-dev=1:1.2.* unzip=6.0-* curl=7.35.* \
+       e2fsprogs=1.42.* iptables=1.4.* xfsprogs=3.1.* xz-utils=5.1.* \
+       mono-mcs=3.2.* less=458-* groff=1.22.* liberror-perl=0.17-* \
+       asciidoc=8.6.* build-essential=11.* bzr=2.6.* cvs=2:1.12.* cvsps=2.1-* docbook-xml=4.5-* docbook-xsl=1.78.* dpkg-dev=1.17.* \
+       libdbd-sqlite3-perl=1.40-* libdbi-perl=1.630-* libdpkg-perl=1.17.* libhttp-date-perl=6.02-* \
+       libio-pty-perl=1:1.08-* libserf-1-1=1.3.* libsvn-perl=1.8.* libsvn1=1.8.* libtcl8.6=8.6.* libtimedate-perl=2.3000-* \
+       libunistring0=0.9.* libxml2-utils=2.9.* libyaml-perl=0.84-* python-bzrlib=2.6.* python-configobj=4.7.* \
+       sgml-base=1.26+* sgml-data=2.0.* subversion=1.8.* tcl=8.6.* tcl8.6=8.6.* xml-core=0.13+* xmlto=0.0.* xsltproc=1.1.* \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -61,8 +63,9 @@ RUN set -ex \
     && mkdir -p /usr/local/GitVersion_${GITVERSION_VERSION} \
     && unzip /tmp/GitVersion_${GITVERSION_VERSION}.zip -d /usr/local/GitVersion_${GITVERSION_VERSION} \
     && rm /tmp/GitVersion_${GITVERSION_VERSION}.zip \
-    && echo "mono /usr/local/GitVersion_${GITVERSION_VERSION}/GitVersion.exe /output json /showvariable \$1" >> /usr/local/bin/gitversion \
+    && echo "mono /usr/local/GitVersion_${GITVERSION_VERSION}/GitVersion.exe \$@" >> /usr/local/bin/gitversion \
     && chmod +x /usr/local/bin/gitversion
+
 # Install Docker
 RUN set -ex \
     && curl -fSL "https://${DOCKER_BUCKET}/linux/static/${DOCKER_CHANNEL}/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
@@ -87,7 +90,7 @@ RUN set -ex \
 RUN set -ex \
     && wget "https://bootstrap.pypa.io/2.6/get-pip.py" -O /tmp/get-pip.py \
     && python /tmp/get-pip.py \
-    && pip install awscli \
+    && pip install awscli==1.* \
     && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 VOLUME /var/lib/docker
@@ -99,25 +102,25 @@ RUN set -ex \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
         libc6=2.19-* \
-        libcurl3=7.35.0-* \
-        libgcc1=1:4.9.3-* \
-        libgssapi-krb5-2=1.12+dfsg-* \
+        libcurl3=7.35.* \
+        libgcc1=1:4.9.* \
+        libgssapi-krb5-2=1.12* \
         libicu52=52.1-* \
-        liblttng-ust0=2.4.0-* \
-        libssl1.0.0=1.0.1f-* \
+        liblttng-ust0=2.4.* \
+        libssl1.0.0=1.0.* \
         libunwind8=1.1-* \
-        libuuid1=2.20.1-* \
-        zlib1g=1:1.2.8.dfsg-* \
-        software-properties-common=0.92.37.8 \
+        libuuid1=2.20.* \
+        zlib1g=1:1.2.* \
+        software-properties-common=0.92.* \
     && add-apt-repository ppa:ubuntu-toolchain-r/test -y \
     && apt-get update \
-    && apt-get install -y libstdc++6=8-*\
+    && apt-get install -y libstdc++6=8*\
     && rm -rf /var/lib/apt/lists/*
 
 # Install .NET Core SDK
-ENV DOTNET_SDK_VERSION 2.1.101
+ENV DOTNET_SDK_VERSION 2.1.202
 ENV DOTNET_SDK_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-x64.tar.gz
-ENV DOTNET_SDK_DOWNLOAD_SHA d231ac3562f025b848497eddbcb254cfd547bd622b35dc4b1ed5bcd29153f832610b77cf7edf15d9f05c707d4d06abecbdcd7633fa721246d6d7ba61d78eea81
+ENV DOTNET_SDK_DOWNLOAD_SHA e785b9b488b5570708eb060f9a4cb5cf94597d99a8b0a3ee449d2e5df83771c1ba643a87db17ae6727d0e2acb401eca292fb8c68ad92eeb59d7f0d75eab1c20a
 
 RUN set -ex \
     && curl -SL $DOTNET_SDK_DOWNLOAD_URL --output dotnet.tar.gz \
@@ -136,3 +139,18 @@ RUN set -ex \
     && cd .. \
     && rm -rf warmup \
     && rm -rf /tmp/NuGetScratch
+
+# Install Powershell Core
+# See instructions at https://docs.microsoft.com/en-us/powershell/scripting/setup/installing-powershell-core-on-linux
+ENV POWERSHELL_VERSION 6.0.3
+ENV POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/powershell-6.0.3-linux-x64.tar.gz
+ENV POWERSHELL_DOWNLOAD_SHA A43D3056688FABC442BFBE0FD7A096F7E28036759EFF9D6EBE8CB9155C9D9AAB
+
+RUN set -ex \
+    && curl -SL $POWERSHELL_DOWNLOAD_URL --output powershell.tar.gz \
+    && echo "$POWERSHELL_DOWNLOAD_SHA powershell.tar.gz" | sha256sum -c - \
+    && mkdir -p /opt/microsoft/powershell/$POWERSHELL_VERSION \
+    && tar zxf powershell.tar.gz -C /opt/microsoft/powershell/$POWERSHELL_VERSION \
+    && rm powershell.tar.gz \
+    && ln -s /opt/microsoft/powershell/$POWERSHELL_VERSION/pwsh /usr/bin/pwsh
+    
