@@ -10,7 +10,7 @@
 # See the License for the specific language governing permissions and limitations under the License.
 #
 
-FROM ubuntu:14.04.5
+FROM ubuntu:16.04.5
 
 ENV DOCKER_BUCKET="download.docker.com" \
     DOCKER_VERSION="17.09.0-ce" \
@@ -164,7 +164,7 @@ RUN LINUX_VERSION="$(lsb_release --codename | cut -f2)" \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ $LINUX_VERSION-pgdg main" >> /etc/apt/sources.list.d/pgdg.list \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - \
     && apt-get update \
-    && apt-get install -y postgresql-$POSTGRES_VERSION postgresql-contrib-$POSTGRES_VERSION postgresql-$POSTGRES_VERSION-pgtap  python-psycopg2 \
+    && apt-get install -y postgresql-$POSTGRES_VERSION postgresql-$POSTGRES_VERSION-pgtap  python-psycopg2 \
     && pip install pexpect 
 
 # Install Sqitch
