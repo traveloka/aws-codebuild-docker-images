@@ -10,7 +10,7 @@
 # See the License for the specific language governing permissions and limitations under the License.
 #
 
-FROM ubuntu:16.04.5
+FROM ubuntu:16.04
 
 ENV DOCKER_BUCKET="download.docker.com" \
     DOCKER_VERSION="17.09.0-ce" \
