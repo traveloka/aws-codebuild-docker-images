@@ -155,10 +155,10 @@ COPY m2-settings.xml $MAVEN_CONFIG/settings.xml
 
 # Install Postgres 
 
-ENV POSTGRES_VERSION=10.6 \
+ENV POSTGRES_VERSION=10 \
     POSTGRES_PATH="/etc/postgresql" \
-    POSTGRES_HBA_CONFIG="/etc/postgresql/10.6/main/pg_hba.conf" \
-    POSTGRES_CONFIG="/etc/postgresql/10.6/main/postgresql.conf"
+    POSTGRES_HBA_CONFIG="/etc/postgresql/10/main/pg_hba.conf" \
+    POSTGRES_CONFIG="/etc/postgresql/10/main/postgresql.conf"
 
 RUN LINUX_VERSION="$(lsb_release --codename | cut -f2)" \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ $LINUX_VERSION-pgdg main" >> /etc/apt/sources.list.d/pgdg.list \
