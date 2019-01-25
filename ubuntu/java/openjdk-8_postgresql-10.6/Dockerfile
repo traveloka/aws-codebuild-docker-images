@@ -53,7 +53,7 @@ RUN set -ex \
     libdbd-sqlite3-perl=1.50-* libdbi-perl=1.634-* libdpkg-perl=1.18.* libhttp-date-perl=6.02-* \
     libio-pty-perl=1:1.08-* libserf-1-1=1.3.* libsvn-perl=1.9.* libsvn1=1.9.* libtcl8.6=8.6.* libtimedate-perl=2.3000-* \
     libunistring0=0.9.* libxml2-utils=2.9.* libyaml-perl=1.15-* python-bzrlib=2.7.* python-configobj=5.0.* \
-    sgml-base=1.26+* sgml-data=2.0.* subversion=1.9.* tcl=8.6.* tcl8.6=8.6.* xml-core=0.13+* xmlto=0.0.* xsltproc=1.1.* \
+    sgml-base=1.26+* sgml-data=2.0.* subversion=1.9.* tcl=8.6.* tcl8.6=8.6.* xml-core=0.13+* xmlto=0.0.* xsltproc=1.1.* sudo \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
