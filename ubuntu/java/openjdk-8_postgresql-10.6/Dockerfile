@@ -36,7 +36,7 @@ RUN set -ex \
     && ssh-keyscan -t rsa,dsa -H bitbucket.org >> ~/.ssh/known_hosts \
     && chmod 600 ~/.ssh/known_hosts \
     && apt-get install -y --no-install-recommends \
-    wget=1.17-* python=2.7.* python2.7-dev=2.7.* fakeroot=1.20.* ca-certificates \
+    wget=1.17.* python=2.7.* python2.7-dev=2.7.* fakeroot=1.20.* ca-certificates \
     tar=1.28-* gzip=1.6-* zip=3.0-* autoconf=2.69-* automake=1:1.15-* \
     bzip2=1.0.* file=1:5.25-* g++=4:5.3.* gcc=4:5.3.* imagemagick=8:6.8.* \
     libbz2-dev=1.0.* libc6-dev=2.23-* libcurl4-openssl-dev=7.47.* libdb-dev=1:5.3.* \
@@ -47,7 +47,7 @@ RUN set -ex \
     libsqlite3-dev=3.11.* libssl-dev=1.0.* libtool=2.4.* libwebp-dev=0.4.* \
     libxml2-dev=2.9.* libxslt1-dev=1.1.* libyaml-dev=0.1.* make=4.1-* \
     patch=2.7.* xz-utils=5.1.* zlib1g-dev=1:1.2.* unzip=6.0-* curl=7.47.* \
-    e2fsprogs=1.42.* iptables=1.6.* xfsprogs=4.1.* xz-utils=5.1.* \
+    e2fsprogs=1.42.* iptables=1.6.* xfsprogs=4.3.* xz-utils=5.1.* \
     mono-mcs=4.2.* less=481-* groff=1.22.* liberror-perl=0.17-* \
     asciidoc=8.6.* build-essential=12.* bzr=2.7.* cvs=2:1.12.* cvsps=2.1-* docbook-xml=4.5-* docbook-xsl=1.79.* dpkg-dev=1.18.* \
     libdbd-sqlite3-perl=1.50-* libdbi-perl=1.634-* libdpkg-perl=1.18.* libhttp-date-perl=6.02-* \
