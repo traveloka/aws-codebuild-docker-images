@@ -14,7 +14,7 @@ Steps to build Ruby 2.3.1 image
 * Run `cd ubuntu/ruby/2.3.1` to change the directory in your local workspace. This is the location of the Ruby 2.3.1 Dockerfile with Ubuntu 14.04 base.
 * Run `docker build -t aws/codebuild/ruby:2.3.1 .` to build Docker image locally
 
-To poke around in the image iteractively, build it and run:
+To poke around in the image interactively, build it and run:
 `docker run -it --entrypoint sh aws/codebuild/ruby:2.3.1 -c bash`
 
 To let the Docker daemon start up in the container, build it and run:
@@ -34,6 +34,7 @@ Some of the images in this repository are no longer actively maintained by AWS C
 
 The following images are actively maintained by AWS CodeBuild, and are listed in the CodeBuild console.
 
+<<<<<<< HEAD
 + [android-java-8 24.4.1](ubuntu/android-java-8/24.4.1)
 + [android-java-8 26.1.1](ubuntu/android-java-8/26.1.1)
 + [docker 17.09.0](ubuntu/docker/17.09.0)
@@ -55,4 +56,7 @@ The following images are actively maintained by AWS CodeBuild, and are listed in
 + [ruby 2.3.1](ubuntu/ruby/2.3.1)
 + [ruby 2.5.1](ubuntu/ruby/2.5.1)
 + [ubuntu-base 14.04](ubuntu/ubuntu-base/14.04)
+=======
++ [standard 1.0](ubuntu/standard/1.0)
+>>>>>>> topstream/master
 

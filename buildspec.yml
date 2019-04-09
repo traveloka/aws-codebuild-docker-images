@@ -3,6 +3,7 @@ version: 0.2
 phases:
   build:
     commands:
+<<<<<<< HEAD
       - cd $CODEBUILD_SRC_DIR/ubuntu/android-java-8/24.4.1
       - docker build -t aws/codebuild/android-java-8:24.4.1 .
       - cd $CODEBUILD_SRC_DIR/ubuntu/android-java-8/26.1.1
@@ -45,3 +46,7 @@ phases:
       - docker build -t aws/codebuild/php:7.0 .
       - cd $CODEBUILD_SRC_DIR/ubuntu/ubuntu-base/14.04
       - docker build -t aws/codebuild/ubuntu-base:14.04 .
+=======
+      - cd $CODEBUILD_SRC_DIR/ubuntu/standard/1.0
+      - docker build -t aws/codebuild/standard:1.0 .
+>>>>>>> topstream/master
