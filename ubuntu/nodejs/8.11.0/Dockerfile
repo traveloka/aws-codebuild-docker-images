@@ -135,9 +135,6 @@ RUN set -ex \
 		&& ln -s /usr/local/bin/node /usr/local/bin/nodejs \
 		&& rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-<<<<<<< HEAD
-=======
 RUN npm set unsafe-perm true
 
->>>>>>> topstream/master
 CMD [ "node" ]

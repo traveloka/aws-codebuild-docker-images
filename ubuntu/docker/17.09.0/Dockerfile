@@ -100,7 +100,4 @@ RUN set -ex \
 VOLUME /var/lib/docker
 
 COPY dockerd-entrypoint.sh /usr/local/bin/
-<<<<<<< HEAD
-=======
 
->>>>>>> topstream/master

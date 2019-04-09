@@ -34,31 +34,5 @@ Some of the images in this repository are no longer actively maintained by AWS C
 
 The following images are actively maintained by AWS CodeBuild, and are listed in the CodeBuild console.
 
-<<<<<<< HEAD
-+ [android-java-8 24.4.1](ubuntu/android-java-8/24.4.1)
-+ [android-java-8 26.1.1](ubuntu/android-java-8/26.1.1)
-+ [docker 17.09.0](ubuntu/docker/17.09.0)
-+ [dot-net core-1](ubuntu/dot-net/core-1)
-+ [dot-net core-2.1](ubuntu/dot-net/core-2.1)
-+ [dot-net core-2](ubuntu/dot-net/core-2)
-+ [golang 1.10](ubuntu/golang/1.10)
-+ [java openjdk-8](ubuntu/java/openjdk-8)
-+ [java openjdk-9](ubuntu/java/openjdk-9)
-+ [nodejs 10.1.0](ubuntu/nodejs/10.1.0)
-+ [nodejs 6.3.1](ubuntu/nodejs/6.3.1)
-+ [nodejs 8.11.0](ubuntu/nodejs/8.11.0)
-+ [php 5.6](ubuntu/php/5.6)
-+ [php 7.0](ubuntu/php/7.0)
-+ [python 2.7.12](ubuntu/python/2.7.12)
-+ [python 3.3.6](ubuntu/python/3.3.6)
-+ [python 3.4.5](ubuntu/python/3.4.5)
-+ [python 3.5.2](ubuntu/python/3.5.2)
-+ [python 3.6.5](ubuntu/python/3.6.5)
-+ [ruby 2.2.5](ubuntu/ruby/2.2.5)
-+ [ruby 2.3.1](ubuntu/ruby/2.3.1)
-+ [ruby 2.5.1](ubuntu/ruby/2.5.1)
-+ [ubuntu-base 14.04](ubuntu/ubuntu-base/14.04)
-=======
 + [standard 1.0](ubuntu/standard/1.0)
->>>>>>> topstream/master
 

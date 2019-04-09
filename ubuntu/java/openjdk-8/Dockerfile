@@ -103,10 +103,6 @@ COPY dockerd-entrypoint.sh /usr/local/bin/
 
 ENV JAVA_VERSION=8 \
     JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
-<<<<<<< HEAD
-    JDK_VERSION="8u171-b11-2~14.04" \
-=======
->>>>>>> topstream/master
     JDK_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
     JRE_HOME="/usr/lib/jvm/java-8-openjdk-amd64" \
     ANT_VERSION=1.10.3 \
@@ -135,8 +131,6 @@ RUN set -ex \
     # Ensure Java cacerts symlink points to valid location
     && update-ca-certificates -f \
 
-<<<<<<< HEAD
-=======
     # Install Ant
     && curl -LSso /var/tmp/apache-ant-$ANT_VERSION-bin.tar.gz https://archive.apache.org/dist/ant/binaries/apache-ant-$ANT_VERSION-bin.tar.gz  \
     && echo "$ANT_DOWNLOAD_SHA512 /var/tmp/apache-ant-$ANT_VERSION-bin.tar.gz" | sha512sum -c - \
@@ -161,5 +155,4 @@ RUN set -ex \
     && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && apt-get clean
 
->>>>>>> topstream/master
 COPY m2-settings.xml $MAVEN_CONFIG/settings.xml
