@@ -20,6 +20,8 @@ ENV DOCKER_BUCKET="download.docker.com" \
     DOCKER_COMPOSE_VERSION="1.21.2" \
     GITVERSION_VERSION="3.6.5"
 
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu/|http://kartolo.sby.datautama.net.id/ubuntu/|g' /etc/apt/sources.list 
+
 # Install git, SSH, and other utilities
 RUN set -ex \
     && echo 'Acquire::CompressionTypes::Order:: "gz";' > /etc/apt/apt.conf.d/99use-gzip-compression \
@@ -123,20 +125,17 @@ RUN set -ex \
     && add-apt-repository ppa:openjdk-r/ppa \
     && apt-get update \
     && apt-get install -y python-setuptools=$PYTHON_TOOL_VERSION \
-
     # Install OpenJDK 8
     && apt-get install -y openjdk-${JAVA_VERSION}-jdk=$JDK_VERSION \
     && apt-get install -y --no-install-recommends ca-certificates-java \
     && apt-get clean \
     # Ensure Java cacerts symlink points to valid location
     && update-ca-certificates -f \
-
     # Install Ant
     && curl -LSso /var/tmp/apache-ant-$ANT_VERSION-bin.tar.gz https://archive.apache.org/dist/ant/binaries/apache-ant-$ANT_VERSION-bin.tar.gz  \
     && echo "$ANT_DOWNLOAD_SHA512 /var/tmp/apache-ant-$ANT_VERSION-bin.tar.gz" | sha512sum -c - \
     && tar -xzf /var/tmp/apache-ant-$ANT_VERSION-bin.tar.gz -C /opt \
     && update-alternatives --install /usr/bin/ant ant /opt/apache-ant-$ANT_VERSION/bin/ant 10000 \
-
     # Install Maven
     && mkdir -p $MAVEN_HOME \
     && curl -LSso /var/tmp/apache-maven-$MAVEN_VERSION-bin.tar.gz https://apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz \
@@ -144,13 +143,11 @@ RUN set -ex \
     && tar xzvf /var/tmp/apache-maven-$MAVEN_VERSION-bin.tar.gz -C $MAVEN_HOME --strip-components=1 \
     && update-alternatives --install /usr/bin/mvn mvn /opt/maven/bin/mvn 10000 \
     && mkdir -p $MAVEN_CONFIG \
-
     # Install Gradle
     && curl -LSso /var/tmp/gradle-$GRADLE_VERSION-bin.zip https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip \
     && echo "$GRADLE_DOWNLOAD_SHA256 /var/tmp/gradle-$GRADLE_VERSION-bin.zip" | sha256sum -c - \
     && unzip /var/tmp/gradle-$GRADLE_VERSION-bin.zip -d /opt \
     && update-alternatives --install /usr/local/bin/gradle gradle /opt/gradle-$GRADLE_VERSION/bin/gradle 10000 \
-
     # Cleanup
     && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && apt-get clean
@@ -163,11 +160,11 @@ ENV POSTGRES_VERSION=9.5 \
     POSTGRES_PATH="/etc/postgresql" \
     POSTGRES_HBA_CONFIG="/etc/postgresql/9.5/main/pg_hba.conf" \
     POSTGRES_CONFIG="/etc/postgresql/9.5/main/postgresql.conf" \
-    POSTGIS_VERSION=2.5
+    POSTGIS_VERSION=2.4
 
 RUN LINUX_VERSION="$(lsb_release --codename | cut -f2)" \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ $LINUX_VERSION-pgdg main" >> /etc/apt/sources.list.d/pgdg.list \
-    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - \
+    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && apt-get update \
     && apt-get install -y postgresql-$POSTGRES_VERSION-postgis-$POSTGIS_VERSION postgresql-contrib-$POSTGRES_VERSION postgresql-$POSTGRES_VERSION-pgtap  python-psycopg2 \
     && pip install pexpect 
