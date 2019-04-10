@@ -158,7 +158,7 @@ ENV POSTGRES_VERSION=9.5 \
     POSTGRES_PATH="/etc/postgresql" \
     POSTGRES_HBA_CONFIG="/etc/postgresql/9.5/main/pg_hba.conf" \
     POSTGRES_CONFIG="/etc/postgresql/9.5/main/postgresql.conf" \
-    POSTGIS_VERSION=2.4
+    POSTGIS_VERSION=2.3
 
 RUN LINUX_VERSION="$(lsb_release --codename | cut -f2)" \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ $LINUX_VERSION-pgdg main" >> /etc/apt/sources.list.d/pgdg.list \
@@ -166,6 +166,7 @@ RUN LINUX_VERSION="$(lsb_release --codename | cut -f2)" \
     && apt-get update \
     && apt-get install -y postgresql-$POSTGRES_VERSION-postgis-$POSTGIS_VERSION postgresql-contrib-$POSTGRES_VERSION postgresql-$POSTGRES_VERSION-pgtap  python-psycopg2 \
     && pip install pexpect 
+
 
 # Install Sqitch
 
@@ -179,6 +180,7 @@ RUN apt-get install libdbd-pg-perl \
     && echo "" > $FILE_TEMPLATE
 
 # Add User for Testing
+
 ENV USER=docker
 
 RUN useradd -m -d /home/$USER -s /bin/bash -c "docker testing" -U $USER
