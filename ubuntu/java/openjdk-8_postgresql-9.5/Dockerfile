@@ -24,6 +24,10 @@ ENV DOCKER_BUCKET="download.docker.com" \
 RUN set -ex \
     && echo 'Acquire::CompressionTypes::Order:: "gz";' > /etc/apt/apt.conf.d/99use-gzip-compression \
     && apt-get update \
+    && apt install -y apt-transport-https \
+    && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+    && echo "deb https://download.mono-project.com/repo/ubuntu stable-trusty main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
+    && apt-get update \
     && apt-get install software-properties-common -y --no-install-recommends \
     && apt-add-repository ppa:git-core/ppa \
     && apt-get update \
@@ -48,7 +52,7 @@ RUN set -ex \
        libxml2-dev=2.9.* libxslt1-dev=1.1.* libyaml-dev=0.1.* make=3.81-* \
        patch=2.7.* xz-utils=5.1.* zlib1g-dev=1:1.2.* unzip=6.0-* curl=7.35.* \
        e2fsprogs=1.42.* iptables=1.4.* xfsprogs=3.1.* xz-utils=5.1.* \
-       mono-mcs=3.2.* less=458-* groff=1.22.* liberror-perl=0.17-* \
+       mono-devel less=458-* groff=1.22.* liberror-perl=0.17-* \
        asciidoc=8.6.* build-essential=11.* bzr=2.6.* cvs=2:1.12.* cvsps=2.1-* docbook-xml=4.5-* docbook-xsl=1.78.* dpkg-dev=1.17.* \
        libdbd-sqlite3-perl=1.40-* libdbi-perl=1.630-* libdpkg-perl=1.17.* libhttp-date-perl=6.02-* \
        libio-pty-perl=1:1.08-* libserf-1-1=1.3.* libsvn-perl=1.8.* libsvn1=1.8.* libtcl8.6=8.6.* libtimedate-perl=2.3000-* \
@@ -158,13 +162,14 @@ COPY m2-settings.xml $MAVEN_CONFIG/settings.xml
 ENV POSTGRES_VERSION=9.5 \
     POSTGRES_PATH="/etc/postgresql" \
     POSTGRES_HBA_CONFIG="/etc/postgresql/9.5/main/pg_hba.conf" \
-    POSTGRES_CONFIG="/etc/postgresql/9.5/main/postgresql.conf"
+    POSTGRES_CONFIG="/etc/postgresql/9.5/main/postgresql.conf" \
+    POSTGIS_VERSION=2.5
 
 RUN LINUX_VERSION="$(lsb_release --codename | cut -f2)" \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ $LINUX_VERSION-pgdg main" >> /etc/apt/sources.list.d/pgdg.list \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - \
     && apt-get update \
-    && apt-get install -y postgresql-$POSTGRES_VERSION postgresql-contrib-$POSTGRES_VERSION postgresql-$POSTGRES_VERSION-pgtap  python-psycopg2 \
+    && apt-get install -y postgresql-$POSTGRES_VERSION-postgis-$POSTGIS_VERSION postgresql-contrib-$POSTGRES_VERSION postgresql-$POSTGRES_VERSION-pgtap  python-psycopg2 \
     && pip install pexpect 
 
 # Install Sqitch

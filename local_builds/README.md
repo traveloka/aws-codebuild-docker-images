@@ -16,17 +16,23 @@ You can verify the SHA matches our [latest release](https://docs.aws.amazon.com/
 
 Download and use our codebuild_build.sh script to run your local builds.
 
-usage: codebuild_build.sh [-i image_name] [-a artifact_output_directory] [options]
+    usage: codebuild_build.sh [-i image_name] [-a artifact_output_directory] [options]
 
 **Required:**  
   -i        Used to specify the customer build container image.  
   -a        Used to specify an artifact output directory.  
 
 **Optional:**  
-  -s        Used to specify a source directory. Defaults to the current working directory.  
+  -l        Used to override the default local agent image.  
   -c        Use the AWS configuration and credentials from your local host. This includes ~/.aws and any AWS_* environment variables.  
+  -p        Used to specify the AWS CLI Profile.  
   -b        Used to specify a buildspec override file. Defaults to buildspec.yml in the source directory.  
   -e        Used to specify a file containing environment variables.  
+  -m        Used to mount the source directory to the customer build container directly.  
+  -s        Used to specify a source directory. Defaults to the current working directory.  
+  * First (-s) is for primary source
+  * Use additional (-s) in `<sourceIdentifier>:<sourceLocation>` format for secondary source
+  * For `sourceIdentifier`, use a value that is fewer than 128 characters and contains only alphanumeric characters and underscores
 
 **Environment variable file format:**
   * Expects each line to be in VAR=VAL format
